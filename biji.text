@@ -1,0 +1,165 @@
+组件通讯
+
+通讯场景
+父子
+子父
+跨级
+同级
+
+通讯需求
+数据传递 谁向谁传递，也就是在一个组件可以拿到另一个组件的数据
+
+通过prop向子组件传递数据 不接收变成自定义属性会被渲染组件元素根节点上 接收就是当成组件传值 
+
+通信方法
+父子：props传递
+在组件上通过属性进行设置，在组件内部通过props选项接收
+props:{
+    value:{
+        type:[String,Number],
+        default:0
+    }
+}
+
+动态属性 style 和 class
+
+$emit 写个事件通过$emit触发
+子组件传值给父组件
+
+组件的声明周期:组件从创建到销毁过程中执行的函数（回调）
+创建 更新 销毁
+
+keep-alive 缓存 把组件缓存起来不会销毁
+
+创建（实例化）
+数据的初始化 beforeCreate created
+dom 初始化 beforeMount mounted
+
+数据更新之前 beforeUpdate Updated
+销毁前 beforeDestroy destroyed
+
+缓存
+activated  组件启用
+deactived  组件停用 
+
+errorCaptured 组件报错
+
+slot 默认插槽 <slot><slot> 之间传递 不会被渲染 向组件传递内容 可以有名字
+具命插槽 <slot name="名字"><slot> 通过slot属性指定
+作用域插槽 <slot aa="diuige"><slot>各种属性 通过slot-scope接受
+
+:is 通过is属性控制渲染不同组件
+
+mounted
+$.children 可以获取下面所有的子组件 通过solt接受进来 子组件实例
+
+v-module 可以编译成 v-bind 和 value input事件通过事件和value达到数据双向绑定效果
+组件上 获取input回调函数第一个参数赋值给动态绑定属性
+需要组件内部$imit触发
+
+修饰符
+.stop 阻止冒泡
+:vale=.sync修饰符 语法糖 @updata事件 动态绑定属性的修饰符 修改prop 进行双向绑定 和v-module一样只是接发不一样
+@update:isShow="bol=>isShow=bol"
+
+在输入框中，v-model 默认是同步数据，使用 .lazy 会转变为在 change 事件中同步 ，
+.number 修饰符可以将 输入的值转化为Number类型 ，否则虽然你输入的是数字
+.trim 修饰符会自动过滤掉输入的首尾空格
+
+
+内置组件
+component 通过is属性动态控制组件的切换
+slot 使用插槽做内容分发
+template 用于包裹不会被页面渲染 第二用法在单文件组件中代替template属性
+keep-alive 组件缓存 
+
+内置api
+$set 通过索引改变数组,给对象添加新属性
+$el @return element 获取dom节点
+$children  可以获取下面所有子组件 通过solt接收进来 
+$emit() 触发自定义事件
+
+ref="h" 通过$refs接收
+作用在dom元素上 获取dom节点
+作用在组建上 获取组件实例
+
+ref一个是对象 children一个是数组
+
+$on倾听一个事件
+$once一次性倾听一个事件
+$off停止倾听一个事件
+
+
+1）$refs
+
+首先你的给子组件做标记。demo ：<firstchild ref="one"></firstchild>
+然后在父组件中，通过this.$refs.one就可以访问了这个自组件了，包括访问自组件的data里面的数据，调用它的函数
+2) 子组件通过 $parent 直接给父组件传值
+3) Vue 子组件可以通过 $root 属性访问父组件实例的属性和方法
+
+computed：计算属性将被混入到 Vue 实例中。所有 getter 和 setter 的 this 上下文自动地绑定为 Vue 实例。
+
+$root.$on 监听
+$root.$emit 接收
+
+eventbars window.new vue 事件代理
+window.eventBus = new Vue()
+可以再组件任何位置evenBus触发 同级组件
+
+scoped 只作用于当前样式
+
+$off移除自定义事件监听器。
+如果没有提供参数，则移除所有的事件监听器；
+如果只提供了事件，则移除该事件所有的监听器；
+如果同时提供了事件与回调，则只移除这个回调的监听器。
+
+transtions属性过渡
+定义个名字 
+v-enter  
+v-enter-activat
+v-enter-to
+v-leave
+v-leave-activat
+v-leave-to
+
+v-show v-if 动态组件 组件根节点
+v-enter：定义进入过渡的开始状态。在元素被插入之前生效，在元素被插入之后的下一帧移除。
+v-enter-active：定义进入过渡生效时的状态。在整个进入过渡的阶段中应用，在元素被插入之前生效，在过渡/动画完成之后移除。这个类可以被用来定义进入过渡的过程时间，延迟和曲线函数。
+v-enter-to: 2.1.8版及以上 定义进入过渡的结束状态。在元素被插入之后下一帧生效 (与此同时 v-enter 被移除)，在过渡/动画完成之后移除。
+v-leave: 定义离开过渡的开始状态。在离开过渡被触发时立刻生效，下一帧被移除。
+v-leave-active：定义离开过渡生效时的状态。在整个离开过渡的阶段中应用，在离开过渡被触发时立刻生效，在过渡/动画完成之后移除。这个类可以被用来定义离开过渡的过程时间，延迟和曲线函数。
+v-leave-to: 2.1.8版及以上 定义离开过渡的结束状态。在离开过渡被触发之后下一帧生效 (与此同时 v-leave 被删除)，在过渡/动画完成之后移除
+
+
+自定义 和 fileter
+
+Vue.component (组件名称，组件配置对象)
+
+
+自定义指令
+全局 vue.directive('名字',{对象})
+局部 directives{}
+钩子函数 bind 只调用一次 指令第一次绑定到元素时调用
+inserted 被绑定元素插入父节点时调用
+update 所在的vnode 更新时调用
+componentUpdated 指令在组件的vnode及其子vnode全部更新后调用
+ubind 只调用一次指令与元素解绑是调用
+
+钩子函数参数
+el 获取指令dom参数
+binding  name value oldvalue expression argue modifiers vnode oldvnode
+
+全局Vue.filter 过滤器
+Vue.component(组件名称，组件配置对象) 全局组件
+Vue.filter(过滤器名称，过滤器方法) 全局过滤器 需要有返回值 接受一个vue
+Vue.directive(指令名，指令配置对象 | 方法) 全局指令 用于操作dom
+
+components 局部注册
+filters 局部过滤器
+directives 局部指令
+
+插件：为Vue添加全局功能 插件范围没有限制 
+1.外部写个hanling全局js功能抛出 2.引入 3.通过use传过去 4.写入hanling组件
+
+全局注册组件
+1.引入tab  2.Vue.component('tab',tab); 3.注册组件
